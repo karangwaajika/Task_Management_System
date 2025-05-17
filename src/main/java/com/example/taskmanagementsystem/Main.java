@@ -1,6 +1,7 @@
 package com.example.taskmanagementsystem;
 
 import com.example.taskmanagementsystem.util.DBConnection;
+import com.example.taskmanagementsystem.util.SchemaCreator;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -13,6 +14,8 @@ public class Main {
 
 	public static void main(String[] args) {
 		try (Connection conn = DBConnection.getConnection()) {
+			SchemaCreator sc = new SchemaCreator(conn);
+			sc.createEmployeeTable();
 			System.out.println("DB connected!!");
 		}catch (SQLException e) {
 			logger.log(Level.ERROR, e.getMessage());
