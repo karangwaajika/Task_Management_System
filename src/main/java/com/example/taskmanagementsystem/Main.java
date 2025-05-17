@@ -16,6 +16,9 @@ public class Main {
 		try (Connection conn = DBConnection.getConnection()) {
 			SchemaCreator sc = new SchemaCreator(conn);
 			sc.createEmployeeTable();
+			sc.createProjectTable();
+			sc.createTaskTable();
+			sc.createEmployeeTaskTable();
 			System.out.println("DB connected!!");
 		}catch (SQLException e) {
 			logger.log(Level.ERROR, e.getMessage());
