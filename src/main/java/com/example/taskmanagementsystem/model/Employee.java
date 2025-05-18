@@ -8,16 +8,6 @@ public class Employee {
     private String telephoneNumber;
     private char sex;
 
-    public Employee(int id, String firstName, String lastName,
-                    String email, String telephoneNumber, char sex){
-        this.id =  id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.telephoneNumber = telephoneNumber;
-        this.sex = sex;
-    }
-
     public Employee(String firstName, String lastName,
                     String email, String telephoneNumber, char sex){
         this.firstName = firstName;
@@ -25,6 +15,12 @@ public class Employee {
         this.email = email;
         this.telephoneNumber = telephoneNumber;
         this.sex = sex;
+    }
+
+    public Employee(int id, String firstName, String lastName,
+                    String email, String telephoneNumber, char sex){
+        this(firstName, lastName, email, telephoneNumber, sex);
+        this.id =  id;
     }
 
     public void setId(int id) {
