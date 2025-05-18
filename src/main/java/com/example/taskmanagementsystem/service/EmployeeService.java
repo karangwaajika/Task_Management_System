@@ -12,7 +12,10 @@ import java.util.ArrayList;
 public class EmployeeService {
     private EmployeeDao employeeDao = new EmployeeDao();
 
-    public void registerEmployee(Employee employee) throws SQLException {
+    public void registerEmployee(Employee employee) throws Exception, SQLException {
+        if(employeeDao.checkIfExists(employee.getEmail())){
+            throw new Exception("Employee exists already");
+        }
         employeeDao.insert(employee);
     }
 
@@ -25,7 +28,7 @@ public class EmployeeService {
 
     public void deleteEmployee(int employeeId) throws Exception, SQLException {
         if(!employeeDao.checkIdExists(employeeId)){
-            throw new Exception("User doesn't exists");
+            throw new Exception("Employee doesn't exists");
         }
         employeeDao.delete(employeeId);
     }

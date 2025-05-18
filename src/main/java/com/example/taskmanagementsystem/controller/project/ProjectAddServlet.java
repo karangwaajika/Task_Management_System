@@ -44,7 +44,7 @@ public class ProjectAddServlet extends HttpServlet {
             PrintWriter ou = resp.getWriter();
             ou.print(json);
             ou.flush();
-        } catch (SQLException e) {
+        } catch (Exception e) {
             logger.log(Level.ERROR, e.getMessage());
             // Response Json
             String json = """

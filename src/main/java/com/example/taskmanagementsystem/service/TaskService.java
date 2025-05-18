@@ -10,7 +10,10 @@ import java.util.ArrayList;
 public class TaskService {
     private TaskDao taskDao = new TaskDao();
 
-    public void addTask(Task task) throws SQLException {
+    public void addTask(Task task) throws Exception, SQLException {
+        if(taskDao.checkIfExists(task.getTitle(), task.getProject().getId())){
+            throw new Exception("Task exists already !!");
+        }
         taskDao.insert(task);
     }
 

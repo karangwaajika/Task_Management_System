@@ -37,7 +37,7 @@ public class TaskDao {
     }
 
     public boolean checkIfExists(String title, int projectId) throws SQLException{
-        String sql = "SELECT COUNT(*) FROM task WHERE title = ? && project_id = ?";
+        String sql = "SELECT COUNT(*) FROM task WHERE title = ? AND project_id = ?";
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {

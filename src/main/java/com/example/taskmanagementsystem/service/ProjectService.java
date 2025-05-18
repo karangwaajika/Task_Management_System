@@ -10,7 +10,10 @@ import java.util.ArrayList;
 public class ProjectService {
     private ProjectDao projectDao = new ProjectDao();
 
-    public void addProject(Project project) throws SQLException {
+    public void addProject(Project project) throws Exception, SQLException {
+        if(projectDao.checkIfExists(project.getName())){
+            throw new Exception("Project exists already !!");
+        }
         projectDao.insert(project);
     }
 
