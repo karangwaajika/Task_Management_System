@@ -2,6 +2,7 @@ package com.example.taskmanagementsystem.dao;
 
 import com.example.taskmanagementsystem.model.Employee;
 import com.example.taskmanagementsystem.util.DBConnection;
+import org.apache.logging.log4j.Level;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -34,4 +35,21 @@ public class EmployeeDao {
             System.out.println("Employee successfully inserted !!!");
         }
     }
+
+    public boolean checkEmployeeExists(String email) throws SQLException{
+        String sql = "SELECT COUNT(*) FROM employee WHERE email = ?";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, email);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                int count = rs.getInt(1);
+                return count > 0;
+            }
+        }
+        return false;
+    }
+    
 }
