@@ -34,4 +34,37 @@ public class TaskDao {
         }
     }
 
+    public boolean checkIfExists(String title, int projectId) throws SQLException{
+        String sql = "SELECT COUNT(*) FROM task WHERE title = ? && project_id = ?";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, title);
+            stmt.setInt(2, projectId);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                int count = rs.getInt(1);
+                return count > 0;
+            }
+        }
+        return false;
+    }
+
+    public boolean checkIdExists(int id) throws SQLException{
+        String sql = "SELECT COUNT(*) FROM task WHERE id = ?";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                int count = rs.getInt(1);
+                return count > 0;
+            }
+        }
+        return false;
+    }
+
 }
