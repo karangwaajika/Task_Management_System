@@ -17,7 +17,7 @@ public class EmployeeService {
 
     public void updateEmployee(Employee employee) throws Exception, SQLException {
         if(!employeeDao.checkIdExists(employee.getId())){
-            throw new Exception("User doesn't exists");
+            throw new Exception("Employee doesn't exists");
         }
         employeeDao.update(employee);
     }

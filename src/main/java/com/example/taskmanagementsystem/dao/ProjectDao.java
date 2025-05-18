@@ -1,5 +1,6 @@
 package com.example.taskmanagementsystem.dao;
 
+import com.example.taskmanagementsystem.model.Employee;
 import com.example.taskmanagementsystem.model.Project;
 import com.example.taskmanagementsystem.util.DBConnection;
 
@@ -65,4 +66,21 @@ public class ProjectDao {
         }
         return false;
     }
+
+    public void update(Project project) throws SQLException{
+        String query = """ 
+            UPDATE project SET name = ?, description = ? WHERE id = ?
+        """;
+        try(Connection conn = DBConnection.getConnection();
+            PreparedStatement statement = conn.prepareStatement(query)){
+            statement.setString(1, project.getName());
+            statement.setString(2, project.getDescription());
+            statement.setInt(3, project.getId());
+
+            statement.executeUpdate();
+
+            System.out.println("Project successfully updated !!!");
+        }
+    }
+
 }
