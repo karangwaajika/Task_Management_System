@@ -33,4 +33,36 @@ public class ProjectDao {
             System.out.println("Project successfully inserted !!!");
         }
     }
+
+    public boolean checkIfExists(String name) throws SQLException{
+        String sql = "SELECT COUNT(*) FROM project WHERE name = ?";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, name);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                int count = rs.getInt(1);
+                return count > 0;
+            }
+        }
+        return false;
+    }
+
+    public boolean checkIdExists(int id) throws SQLException{
+        String sql = "SELECT COUNT(*) FROM project WHERE id = ?";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                int count = rs.getInt(1);
+                return count > 0;
+            }
+        }
+        return false;
+    }
 }
