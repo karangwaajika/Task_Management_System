@@ -10,7 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class EmployeeDao {
-    public void insertEmployee(Employee employee) throws SQLException {
+    public void insert(Employee employee) throws SQLException {
         String query = """ 
             INSERT INTO employee (first_name, last_name, email,
             telephone_number, sex)
@@ -36,7 +36,7 @@ public class EmployeeDao {
         }
     }
 
-    public boolean checkEmployeeExists(String email) throws SQLException{
+    public boolean checkIfExists(String email) throws SQLException{
         String sql = "SELECT COUNT(*) FROM employee WHERE email = ?";
 
         try (Connection conn = DBConnection.getConnection();
@@ -51,5 +51,40 @@ public class EmployeeDao {
         }
         return false;
     }
-    
+
+    public boolean checkIdExists(int id) throws SQLException{
+        String sql = "SELECT COUNT(*) FROM employee WHERE id = ?";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                int count = rs.getInt(1);
+                return count > 0;
+            }
+        }
+        return false;
+    }
+
+    public void update(Employee employee) throws SQLException{
+        String query = """ 
+            UPDATE employee SET first_name = ?, last_name = ?,
+            telephone_number = ?, sex = ? WHERE id = ?
+        """;
+        try(Connection conn = DBConnection.getConnection();
+            PreparedStatement statement = conn.prepareStatement(query)){
+            statement.setString(1, employee.getFirstName());
+            statement.setString(2, employee.getLastName());
+            statement.setString(3, employee.getTelephoneNumber());
+            statement.setString(4, String.valueOf(employee.getSex()));
+            statement.setInt(5, employee.getId());
+
+            statement.executeUpdate();
+
+            System.out.println("Employee successfully updated !!!");
+        }
+    }
+
 }

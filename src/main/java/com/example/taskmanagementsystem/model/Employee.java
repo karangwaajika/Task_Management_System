@@ -14,7 +14,7 @@ public class Employee {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.telephoneNumber = email;
+        this.telephoneNumber = telephoneNumber;
         this.sex = sex;
     }
 
@@ -23,7 +23,7 @@ public class Employee {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.telephoneNumber = email;
+        this.telephoneNumber = telephoneNumber;
         this.sex = sex;
     }
 
