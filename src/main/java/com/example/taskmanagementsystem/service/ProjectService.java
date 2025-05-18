@@ -31,4 +31,8 @@ public class ProjectService {
     public ArrayList<Project> getAllProjects() throws Exception, SQLException {
         return projectDao.getAll();
     }
+
+    public Project getProject(int projectId) throws Exception, SQLException {
+        return projectDao.getProject(projectId);
+    }
 }

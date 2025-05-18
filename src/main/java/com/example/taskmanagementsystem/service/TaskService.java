@@ -1,6 +1,7 @@
 package com.example.taskmanagementsystem.service;
 
 import com.example.taskmanagementsystem.dao.TaskDao;
+import com.example.taskmanagementsystem.model.Project;
 import com.example.taskmanagementsystem.model.Task;
 
 import java.sql.SQLException;
@@ -11,5 +12,9 @@ public class TaskService {
 
     public void addTask(Task task) throws SQLException {
         taskDao.insert(task);
+    }
+
+    public ArrayList<Task> getAllTasks() throws Exception, SQLException {
+        return taskDao.getAll();
     }
 }

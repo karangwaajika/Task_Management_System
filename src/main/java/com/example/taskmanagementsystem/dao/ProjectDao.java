@@ -84,6 +84,23 @@ public class ProjectDao {
         return projectList;
     }
 
+    public Project getProject(int projectId) throws SQLException{
+        String query = " SELECT * FROM project WHERE id = ?";
+        Project project = null;
+
+        try(Connection conn = DBConnection.getConnection();
+            PreparedStatement statement = conn.prepareStatement(query)){
+            statement.setInt(1, projectId);
+            ResultSet rs = statement.executeQuery();
+
+            if (rs.next()) {
+                project = new Project(rs.getInt("id"), rs.getString("name"),
+                        rs.getString("description"));
+            }
+        }
+        return project;
+    }
+
     public void update(Project project) throws SQLException{
         String query = """ 
             UPDATE project SET name = ?, description = ? WHERE id = ?

@@ -1,6 +1,8 @@
 package com.example.taskmanagementsystem.dao;
 
+import com.example.taskmanagementsystem.model.Project;
 import com.example.taskmanagementsystem.model.Task;
+import com.example.taskmanagementsystem.service.ProjectService;
 import com.example.taskmanagementsystem.util.DBConnection;
 
 import java.sql.*;
@@ -20,7 +22,7 @@ public class TaskDao {
             statement.setString(2, task.getDescription());
             statement.setInt(3, task.getStatus());
             statement.setObject(4, task.getDueDate());
-            statement.setInt(5, task.getProjectId());
+            statement.setInt(5, task.getProject().getId());
 
             statement.executeUpdate();
 
@@ -65,6 +67,34 @@ public class TaskDao {
             }
         }
         return false;
+    }
+
+    public ArrayList<Task> getAll() throws Exception, SQLException{
+        ArrayList<Task> taskList = new ArrayList<>();
+        String query = """
+            SELECT t.id, t.title, t.description, t.status, t.due_date,t.project_id,
+            p.name AS project_name FROM task t
+            JOIN project p ON t.project_id = p.id
+        """;
+
+        try(Connection conn = DBConnection.getConnection();
+            Statement statement = conn.createStatement();
+            ResultSet rs = statement.executeQuery(query)){
+
+            while (rs.next()) {
+                // Create and set project
+                ProjectService ps = new ProjectService();
+                Project project = ps.getProject(rs.getInt("project_id"));
+
+                Task task = new Task(rs.getInt("id"), rs.getString("title"),
+                        rs.getString("description"), rs.getInt("status"),
+                        rs.getObject("due_date", LocalDate.class),project
+                        );
+                taskList.add(task);
+            }
+        }
+
+        return taskList;
     }
 
 }

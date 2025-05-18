@@ -1,9 +1,10 @@
 package com.example.taskmanagementsystem.controller;
 
-import com.example.taskmanagementsystem.model.Project;
 import com.example.taskmanagementsystem.model.Task;
-import com.example.taskmanagementsystem.service.ProjectService;
 import com.example.taskmanagementsystem.service.TaskService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -15,38 +16,25 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.util.List;
 
-@WebServlet(name ="addTask", value = "/add_task")
-public class TaskAddServlet extends HttpServlet {
+@WebServlet(name = "fetchTasks", value = "/view_tasks")
+public class TaskRetrieveAllServlet extends HttpServlet {
     private final TaskService taskService = new TaskService();
-    private final ProjectService projectService = new ProjectService();
-    private final Logger logger = LogManager.getLogger(TaskAddServlet.class);
+    private static final Logger logger = LogManager.getLogger(TaskRetrieveAllServlet.class);
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String title =  req.getParameter("title");
-        String description =  req.getParameter("description");
-        String status =  req.getParameter("status");
-        String date =  req.getParameter("due_date");
-        String projectId =  req.getParameter("project_id");
-        LocalDate dueDate = LocalDate.parse(date);
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        try {
+            List<Task> tasks = taskService.getAllTasks();
+            // Convert to JSON
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.registerModule(new JavaTimeModule());
+            mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+            String json = mapper.writeValueAsString(tasks);
 
-
-
-        try{
-            Project project = projectService.getProject(Integer.parseInt(projectId));
-            Task task = new Task(title, description, Integer.parseInt(status), dueDate,
-                    project);
-            taskService.addTask(task);
-            // Response Json
-            String json = """
-                {
-                    "status": "success",
-                    "message": "Task Added successfully!!"
-                }
-            """;
+            // Set response type
+            resp.setContentType("application/json");
+            resp.setCharacterEncoding("UTF-8");
 
             // Set response type and encoding
             resp.setContentType("application/json");
@@ -62,7 +50,7 @@ public class TaskAddServlet extends HttpServlet {
             String json = """
                 {
                     "status": "fail",
-                    "message": "Error encountered!!"
+                    "message": "Error encountered !!"
                 }
             """;
 
@@ -75,5 +63,6 @@ public class TaskAddServlet extends HttpServlet {
             ou.print(json);
             ou.flush();
         }
+
     }
 }

@@ -7,19 +7,19 @@ public class Task {
     private String title;
     private String description;
     private LocalDate dueDate;
-    private int projectId; // foreign key
+    private Project project;
     private int status; // 1: not started, 2: ongoing , 3 completed , 4: overdue
 
-    public Task(String title, String description, int status, LocalDate dueDate, int projectId) {
+    public Task(String title, String description, int status, LocalDate dueDate, Project project) {
         this.title = title;
         this.description = description;
         this.status = status;
         this.dueDate = dueDate;
-        this.projectId = projectId;
+        this.project = project;
     }
 
-    public Task(int id, String title, String description, int status, LocalDate dueDate, int projectId) {
-        this(title, description, status, dueDate, projectId);
+    public Task(int id, String title, String description, int status, LocalDate dueDate, Project project) {
+        this(title, description, status, dueDate, project);
         this.id = id;
     }
 
@@ -47,12 +47,12 @@ public class Task {
         return description;
     }
 
-    public int getProjectId() {
-        return projectId;
+    public Project getProject() {
+        return project;
     }
 
-    public void setProjectId(int projectId) {
-        this.projectId = projectId;
+    public void setProject(Project project) {
+        this.project = project;
     }
 
     public int getStatus() {
