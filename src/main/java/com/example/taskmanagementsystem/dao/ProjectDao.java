@@ -83,4 +83,20 @@ public class ProjectDao {
         }
     }
 
+    public void delete(int projectId) throws SQLException{
+        String query = "DELETE FROM project WHERE id = ?";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, projectId);
+
+            int rowDeleted = stmt.executeUpdate();
+            if(rowDeleted > 0){
+                System.out.println("Project deleted");
+            }else{
+                System.out.println("None");
+            }
+        }
+    }
+
 }

@@ -20,4 +20,11 @@ public class ProjectService {
         }
         projectDao.update(project);
     }
+
+    public void deleteProject(int projectId) throws Exception, SQLException {
+        if(!projectDao.checkIdExists(projectId)){
+            throw new Exception("Project doesn't exists");
+        }
+        projectDao.delete(projectId);
+    }
 }
