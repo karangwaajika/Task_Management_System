@@ -22,6 +22,13 @@ public class EmployeeService {
         employeeDao.update(employee);
     }
 
+    public void deleteEmployee(int employeeId) throws Exception, SQLException {
+        if(!employeeDao.checkIdExists(employeeId)){
+            throw new Exception("User doesn't exists");
+        }
+        employeeDao.delete(employeeId);
+    }
+
     public ArrayList<Employee> getAllEmployees() throws Exception, SQLException {
         return employeeDao.getAll();
     }

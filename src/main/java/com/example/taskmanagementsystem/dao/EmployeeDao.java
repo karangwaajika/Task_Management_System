@@ -105,4 +105,21 @@ public class EmployeeDao {
         return employeeList;
     }
 
+    public void delete(int employeeId) throws SQLException{
+        String query = "DELETE FROM employee WHERE id = ?";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, employeeId);
+
+            int rowDeleted = stmt.executeUpdate();
+            if(rowDeleted > 0){
+                System.out.println("Employee deleted");
+            }else{
+                System.out.println("None");
+            }
+
+        }
+    }
+
 }

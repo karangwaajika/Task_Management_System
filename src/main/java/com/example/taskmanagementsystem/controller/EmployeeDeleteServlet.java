@@ -16,21 +16,22 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
-@WebServlet(name = "fetchEmployees", value = "/view_employees")
-public class EmployeeRetrieveAllServlet extends HttpServlet {
+@WebServlet(name = "deleteEmployee", value = "/delete_employee")
+public class EmployeeDeleteServlet extends HttpServlet {
     private final EmployeeService employeeService = new EmployeeService();
-    private static final Logger logger = LogManager.getLogger(EmployeeRetrieveAllServlet.class);
+    private static final Logger logger = LogManager.getLogger(EmployeeDeleteServlet.class);
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String id = req.getParameter("id");
         try {
-            List<Employee> employees = employeeService.getAllEmployees();
-            // Convert to JSON
-            ObjectMapper mapper = new ObjectMapper();
-            String json = mapper.writeValueAsString(employees);
-
-            // Set response type
-            resp.setContentType("application/json");
-            resp.setCharacterEncoding("UTF-8");
+            employeeService.deleteEmployee(Integer.parseInt(id));
+            // Response Json
+            String json = """
+                {
+                    "status": "success",
+                    "message": "Employee deleted successfully !!"
+                }
+            """;
 
             // Set response type and encoding
             resp.setContentType("application/json");
