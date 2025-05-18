@@ -6,6 +6,7 @@ import com.example.taskmanagementsystem.util.DBConnection;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class EmployeeService {
     private EmployeeDao employeeDao = new EmployeeDao();
@@ -19,5 +20,9 @@ public class EmployeeService {
             throw new Exception("User doesn't exists");
         }
         employeeDao.update(employee);
+    }
+
+    public ArrayList<Employee> getAllEmployees() throws Exception, SQLException {
+        return employeeDao.getAll();
     }
 }

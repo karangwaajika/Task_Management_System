@@ -4,10 +4,9 @@ import com.example.taskmanagementsystem.model.Employee;
 import com.example.taskmanagementsystem.util.DBConnection;
 import org.apache.logging.log4j.Level;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.time.LocalDate;
+import java.util.ArrayList;
 
 public class EmployeeDao {
     public void insert(Employee employee) throws SQLException {
@@ -85,6 +84,25 @@ public class EmployeeDao {
 
             System.out.println("Employee successfully updated !!!");
         }
+    }
+
+    public ArrayList<Employee> getAll() throws SQLException{
+        ArrayList<Employee> employeeList = new ArrayList<>();
+        String query = " SELECT * FROM employee ";
+
+        try(Connection conn = DBConnection.getConnection();
+            Statement statement = conn.createStatement();
+            ResultSet rs = statement.executeQuery(query)){
+
+            while (rs.next()) {
+                Employee employee = new Employee(rs.getInt("id"), rs.getString("first_name"),
+                        rs.getString("last_name"),  rs.getString("email"),
+                        rs.getString("telephone_number"),  rs.getString("sex").charAt(0));
+                employeeList.add(employee);
+            }
+        }
+
+        return employeeList;
     }
 
 }
