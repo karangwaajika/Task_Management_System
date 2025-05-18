@@ -24,4 +24,11 @@ public class TaskService {
     public ArrayList<Task> getAllTasks() throws Exception, SQLException {
         return taskDao.getAll();
     }
+
+    public void deleteTask(int taskId) throws Exception, SQLException {
+        if(!taskDao.checkIdExists(taskId)){
+            throw new Exception("Task doesn't exists");
+        }
+        taskDao.delete(taskId);
+    }
 }

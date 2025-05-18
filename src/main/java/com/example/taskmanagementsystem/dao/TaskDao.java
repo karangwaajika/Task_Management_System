@@ -120,4 +120,20 @@ public class TaskDao {
         return taskList;
     }
 
+    public void delete(int taskId) throws SQLException{
+        String query = "DELETE FROM task WHERE id = ?";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, taskId);
+
+            int rowDeleted = stmt.executeUpdate();
+            if(rowDeleted > 0){
+                System.out.println("Task deleted");
+            }else{
+                System.out.println("None");
+            }
+        }
+    }
+
 }
