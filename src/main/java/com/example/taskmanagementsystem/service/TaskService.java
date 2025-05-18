@@ -31,4 +31,11 @@ public class TaskService {
         }
         taskDao.delete(taskId);
     }
+
+    public void updateTask(Task task) throws Exception, SQLException {
+        if(!taskDao.checkIdExists(task.getId())){
+            throw new Exception("Task doesn't exists");
+        }
+        taskDao.update(task);
+    }
 }

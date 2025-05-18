@@ -136,4 +136,24 @@ public class TaskDao {
         }
     }
 
+    public void update(Task task) throws SQLException {
+        String query = """ 
+            UPDATE task SET title = ?, description = ?, status = ?,
+            due_date = ?, project_id = ? WHERE id = ?
+        """;
+        try(Connection conn = DBConnection.getConnection();
+            PreparedStatement statement = conn.prepareStatement(query)){
+            statement.setString(1, task.getTitle());
+            statement.setString(2, task.getDescription());
+            statement.setInt(3, task.getStatus());
+            statement.setObject(4, task.getDueDate());
+            statement.setInt(5, task.getProject().getId());
+            statement.setInt(6, task.getId());
+
+            statement.executeUpdate();
+
+            System.out.println("Task successfully updated !!!");
+        }
+    }
+
 }

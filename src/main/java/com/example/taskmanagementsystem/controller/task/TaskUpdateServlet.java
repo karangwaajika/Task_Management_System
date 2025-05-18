@@ -17,11 +17,11 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDate;
 
-@WebServlet(name ="addTask", value = "/add_task")
-public class TaskAddServlet extends HttpServlet {
+@WebServlet(name = "updateTask", value = "/update_task")
+public class TaskUpdateServlet extends HttpServlet {
     private final TaskService taskService = new TaskService();
     private final ProjectService projectService = new ProjectService();
-    private final Logger logger = LogManager.getLogger(TaskAddServlet.class);
+    private static final Logger logger = LogManager.getLogger(TaskUpdateServlet.class);
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String title =  req.getParameter("title");
@@ -30,17 +30,18 @@ public class TaskAddServlet extends HttpServlet {
         String date =  req.getParameter("due_date");
         String projectId =  req.getParameter("project_id");
         LocalDate dueDate = LocalDate.parse(date);
+        String id = req.getParameter("id");
 
-        try{
+        try {
             Project project = projectService.getProject(Integer.parseInt(projectId));
-            Task task = new Task(title, description, Integer.parseInt(status), dueDate,
+            Task task = new Task(Integer.parseInt(id), title, description, Integer.parseInt(status), dueDate,
                     project);
-            taskService.addTask(task);
+            taskService.updateTask(task);
             // Response Json
             String json = """
                 {
                     "status": "success",
-                    "message": "Task Added successfully!!"
+                    "message": "Task updated successfully!!"
                 }
             """;
 
@@ -58,7 +59,7 @@ public class TaskAddServlet extends HttpServlet {
             String json = """
                 {
                     "status": "fail",
-                    "message":"""+e.getMessage()+"""
+                    "message":"""+ e.getMessage() +"""
                 }
             """;
 
@@ -71,5 +72,6 @@ public class TaskAddServlet extends HttpServlet {
             ou.print(json);
             ou.flush();
         }
+
     }
 }
