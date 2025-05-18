@@ -12,7 +12,8 @@ import java.sql.SQLException;
 public class Main {
 	private static final Logger logger = LogManager.getLogger(Main.class);
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws ClassNotFoundException {
+		Class.forName("org.postgresql.Driver");
 		try (Connection conn = DBConnection.getConnection()) {
 			SchemaCreator sc = new SchemaCreator(conn);
 			sc.createEmployeeTable();
