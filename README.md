@@ -7,28 +7,31 @@
 ![GitHub file size in bytes](https://img.shields.io/github/size/karangwaajika/codeOfAfrica-challenges/index.html)
 
 
-This lab evolves around processing data effectively using regex whereby 
-you can perform some functionality such replace, search and format, and
-dealing with reading from a file as well as write to a file.
+This lab evolves around developing a web application using Java frameworks.
+The aim is to understand Java Web Development using Servlets/JSP, getting familiar with Restful API.
 
 ## Video
 
-* Final Project With UI Interface: https://screenrec.com/share/YlTAymdqCz
+* Final Project: https://screenrec.com/share/qYIBvsu5FR
 
 ## Usage
 
-* JavaFx UI: Interacting with the app
-    - To run the UI, open the "Application" that is inside src/java/com.exampl../Applicaiton
-    - After opening the Application class then click on run button.
-    - Please make sure you have an updated JDK and javaFx installed.
-* Backend codes: Logic behind the UI features
-    - Main class is where all the features are demonstrated.
-    - Custom exceptions are inside an exceptions directory
+* ERD design: https://drive.google.com/file/d/1yx91iDzRJZj91rGV1AZgFM__RQeRkDOn/view?usp=sharing
+* JSP File: Interacting with the app
+    - Inside webapp there is jsp which holds all the jsp pages
+    - static director is where CSS and Images is located
+    - NB: for now the front-end is not implemented only the backend.
+* Backend codes: Logic behind (MVC Architecture)
+    - controller directory handle http request and response
+    - dao is where sql query is implemented
+    - model holds all project classes
+    - service has the business logic
+    - util connect the project with the database
 
 ## Expected Learning Outcomes
 
-- Mastery of Regular Expressions for text manipulation.
-- Proficiency in handling structured data using Java Collections.
-- Understanding of file handling techniques for reading and writing data.
-- Application of Java Streams for processing large data efficiently.
-- Hands-on experience with object-oriented principles in data management.
+- Understand Java Web Development using Servlets/JSP or Spring/Thymeleaf.
+- Build a functional CRUD web application with proper HTTP handling.
+- Implement RESTful APIs and handle client-server interactions.
+- Apply MVC architecture for better project structure.
+- Work with dynamic content rendering in JSP or Thymeleaf.
