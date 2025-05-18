@@ -1,14 +1,18 @@
 package com.example.taskmanagementsystem.dao;
 
+import com.example.taskmanagementsystem.model.Employee;
 import com.example.taskmanagementsystem.model.EmployeeTask;
+import com.example.taskmanagementsystem.model.Project;
+import com.example.taskmanagementsystem.model.Task;
+import com.example.taskmanagementsystem.service.EmployeeService;
+import com.example.taskmanagementsystem.service.ProjectService;
+import com.example.taskmanagementsystem.service.TaskService;
 import com.example.taskmanagementsystem.util.DBConnection;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 public class EmployeeTaskDao {
     public void assignTask(EmployeeTask employeeTask) throws SQLException {
@@ -22,6 +26,13 @@ public class EmployeeTaskDao {
             statement.setInt(3, employeeTask.getEmployee().getId());
 
             statement.executeUpdate();
+
+            // Get generated ID
+            try (ResultSet rs = statement.getGeneratedKeys()) {
+                if (rs.next()) {
+                    employeeTask.setId(rs.getInt(1)); // update employee task object id.
+                }
+            }
 
             System.out.println("EmployeeTask successfully inserted !!!");
         }
@@ -42,6 +53,36 @@ public class EmployeeTaskDao {
             }
         }
         return false;
+    }
+
+    public ArrayList<EmployeeTask> getAll() throws Exception, SQLException{
+        ArrayList<EmployeeTask> assignedTaskList = new ArrayList<>();
+        String query = """
+            SELECT et.id, et.date_assigned, et.date_completed,
+            et.task_id, et.employee_id FROM employee_task et
+            JOIN task t ON et.task_id = t.id JOIN employee e ON et.employee_id = e.id
+        """;
+
+        try(Connection conn = DBConnection.getConnection();
+            Statement statement = conn.createStatement();
+            ResultSet rs = statement.executeQuery(query)){
+
+            while (rs.next()) {
+                // create task
+                TaskService taskService = new TaskService();
+                Task task = taskService.getTask(rs.getInt("task_id"));
+                // create employee
+                EmployeeService employeeService = new EmployeeService();
+                Employee employee = employeeService.getEmployee(rs.getInt("employee_id"));
+
+                EmployeeTask assignedTask = new EmployeeTask(rs.getInt("id"),
+                        rs.getObject("date_completed", LocalDate.class),
+                        rs.getObject("date_assigned", LocalDate.class), task, employee);
+
+                assignedTaskList.add(assignedTask);
+            }
+        }
+        return assignedTaskList;
     }
 
 }

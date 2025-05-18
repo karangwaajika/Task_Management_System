@@ -7,6 +7,7 @@ public class EmployeeTask {
     private LocalDate dateComplete;
     private Task task;
     private Employee employee;
+    private int id;
 
     public EmployeeTask(LocalDate dateAssigned, Task task, Employee employee){
         this.dateAssigned = dateAssigned;
@@ -14,13 +15,22 @@ public class EmployeeTask {
         this.employee = employee;
     }
 
-    public EmployeeTask(LocalDate dateComplete, LocalDate dateAssigned, Task task, Employee employee){
+    public EmployeeTask(int id,LocalDate dateComplete, LocalDate dateAssigned, Task task, Employee employee){
         this(dateAssigned, task, employee);
+        this.id = id;
         this.dateComplete = dateComplete;
     }
 
     public void setEmployee(Employee employee) {
         this.employee = employee;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public Employee getEmployee() {
