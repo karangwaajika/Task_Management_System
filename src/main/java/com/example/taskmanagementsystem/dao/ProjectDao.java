@@ -1,6 +1,5 @@
 package com.example.taskmanagementsystem.dao;
 
-import com.example.taskmanagementsystem.model.Employee;
 import com.example.taskmanagementsystem.model.Project;
 import com.example.taskmanagementsystem.util.DBConnection;
 
@@ -65,6 +64,24 @@ public class ProjectDao {
             }
         }
         return false;
+    }
+
+    public ArrayList<Project> getAll() throws SQLException{
+        ArrayList<Project> projectList = new ArrayList<>();
+        String query = " SELECT * FROM project ";
+
+        try(Connection conn = DBConnection.getConnection();
+            Statement statement = conn.createStatement();
+            ResultSet rs = statement.executeQuery(query)){
+
+            while (rs.next()) {
+                Project project = new Project(rs.getInt("id"), rs.getString("name"),
+                        rs.getString("description"));
+                projectList.add(project);
+            }
+        }
+
+        return projectList;
     }
 
     public void update(Project project) throws SQLException{

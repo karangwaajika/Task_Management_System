@@ -27,4 +27,8 @@ public class ProjectService {
         }
         projectDao.delete(projectId);
     }
+
+    public ArrayList<Project> getAllProjects() throws Exception, SQLException {
+        return projectDao.getAll();
+    }
 }
