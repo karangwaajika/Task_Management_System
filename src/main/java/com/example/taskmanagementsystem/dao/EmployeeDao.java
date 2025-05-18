@@ -1,6 +1,7 @@
 package com.example.taskmanagementsystem.dao;
 
 import com.example.taskmanagementsystem.model.Employee;
+import com.example.taskmanagementsystem.model.Project;
 import com.example.taskmanagementsystem.util.DBConnection;
 import org.apache.logging.log4j.Level;
 
@@ -84,6 +85,24 @@ public class EmployeeDao {
 
             System.out.println("Employee successfully updated !!!");
         }
+    }
+
+    public Employee getEmployee(int employeeId) throws SQLException{
+        String query = " SELECT * FROM employee WHERE id = ?";
+        Employee employee = null;
+
+        try(Connection conn = DBConnection.getConnection();
+            PreparedStatement statement = conn.prepareStatement(query)){
+            statement.setInt(1, employeeId);
+            ResultSet rs = statement.executeQuery();
+
+            if (rs.next()) {
+                employee = new Employee(rs.getInt("id"), rs.getString("first_name"),
+                        rs.getString("last_name"),  rs.getString("email"),
+                        rs.getString("telephone_number"),  rs.getString("sex").charAt(0));
+            }
+        }
+        return employee;
     }
 
     public ArrayList<Employee> getAll() throws SQLException{

@@ -1,6 +1,5 @@
-package com.example.taskmanagementsystem.controller;
+package com.example.taskmanagementsystem.controller.employee;
 
-import com.example.taskmanagementsystem.Main;
 import com.example.taskmanagementsystem.model.Employee;
 import com.example.taskmanagementsystem.service.EmployeeService;
 import jakarta.servlet.ServletException;
@@ -15,27 +14,29 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-@WebServlet(name = "registerEmployee", value = "/add_employee")
-public class EmployeeRegistrationServlet extends HttpServlet {
+@WebServlet(name = "updateEmployee", value = "/update_employee")
+public class EmployeeUpdateServlet extends HttpServlet {
     private final EmployeeService employeeService = new EmployeeService();
-    private static final Logger logger = LogManager.getLogger(EmployeeRegistrationServlet.class);
+    private static final Logger logger = LogManager.getLogger(EmployeeUpdateServlet.class);
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
         String firstName = req.getParameter("first_name");
         String lastName = req.getParameter("last_name");
         String email = req.getParameter("email");
         String telephoneNumber = req.getParameter("telephone_number");
-        char sex = req.getParameter("sex").charAt(0);
+        String sex = req.getParameter("sex");
+        String id = req.getParameter("id");
 
-        Employee employee = new Employee(firstName, lastName, email,
-                telephoneNumber, sex);
+        Employee employee = new Employee(Integer.parseInt(id), firstName, lastName, email,
+                telephoneNumber, sex.charAt(0));
         try {
-            employeeService.registerEmployee(employee);
+            employeeService.updateEmployee(employee);
             // Response Json
             String json = """
                 {
                     "status": "success",
-                    "message": "Employee Registered successfully!!"
+                    "message": "Employee updated successfully!!"
                 }
             """;
 
@@ -53,7 +54,7 @@ public class EmployeeRegistrationServlet extends HttpServlet {
             String json = """
                 {
                     "status": "fail",
-                    "message": "Error encountered!!"
+                    "message":"""+ e.getMessage() +"""
                 }
             """;
 
@@ -66,7 +67,6 @@ public class EmployeeRegistrationServlet extends HttpServlet {
             ou.print(json);
             ou.flush();
         }
-
 
     }
 }

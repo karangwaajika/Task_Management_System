@@ -1,9 +1,7 @@
-package com.example.taskmanagementsystem.controller;
+package com.example.taskmanagementsystem.controller.project;
 
 import com.example.taskmanagementsystem.model.Project;
-import com.example.taskmanagementsystem.model.Task;
 import com.example.taskmanagementsystem.service.ProjectService;
-import com.example.taskmanagementsystem.service.TaskService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -15,36 +13,26 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 
-@WebServlet(name ="addTask", value = "/add_task")
-public class TaskAddServlet extends HttpServlet {
-    private final TaskService taskService = new TaskService();
+@WebServlet(name = "updateProject", value = "/update_project")
+public class ProjectUpdateServlet extends HttpServlet {
     private final ProjectService projectService = new ProjectService();
-    private final Logger logger = LogManager.getLogger(TaskAddServlet.class);
+    private static final Logger logger = LogManager.getLogger(ProjectUpdateServlet.class);
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String title =  req.getParameter("title");
-        String description =  req.getParameter("description");
-        String status =  req.getParameter("status");
-        String date =  req.getParameter("due_date");
-        String projectId =  req.getParameter("project_id");
-        LocalDate dueDate = LocalDate.parse(date);
 
+        String name = req.getParameter("name");
+        String description = req.getParameter("description");
+        String id = req.getParameter("id");
 
-
-        try{
-            Project project = projectService.getProject(Integer.parseInt(projectId));
-            Task task = new Task(title, description, Integer.parseInt(status), dueDate,
-                    project);
-            taskService.addTask(task);
+        Project project = new Project(Integer.parseInt(id), name, description);
+        try {
+            projectService.updateProject(project);
             // Response Json
             String json = """
                 {
                     "status": "success",
-                    "message": "Task Added successfully!!"
+                    "message": "Project updated successfully!!"
                 }
             """;
 
@@ -62,7 +50,7 @@ public class TaskAddServlet extends HttpServlet {
             String json = """
                 {
                     "status": "fail",
-                    "message": "Error encountered!!"
+                    "message":"""+ e.getMessage() +"""
                 }
             """;
 
@@ -75,5 +63,6 @@ public class TaskAddServlet extends HttpServlet {
             ou.print(json);
             ou.flush();
         }
+
     }
 }

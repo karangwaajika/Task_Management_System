@@ -33,6 +33,9 @@ public class ProjectService {
     }
 
     public Project getProject(int projectId) throws Exception, SQLException {
+        if(!projectDao.checkIdExists(projectId)){
+            throw new Exception("Project doesn't exists");
+        }
         return projectDao.getProject(projectId);
     }
 }

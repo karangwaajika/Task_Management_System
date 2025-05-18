@@ -2,6 +2,7 @@ package com.example.taskmanagementsystem.service;
 
 import com.example.taskmanagementsystem.dao.EmployeeDao;
 import com.example.taskmanagementsystem.model.Employee;
+import com.example.taskmanagementsystem.model.Project;
 import com.example.taskmanagementsystem.util.DBConnection;
 
 import java.sql.Connection;
@@ -29,6 +30,12 @@ public class EmployeeService {
         employeeDao.delete(employeeId);
     }
 
+    public Employee getEmployee(int employeeId) throws Exception, SQLException {
+        if(!employeeDao.checkIdExists(employeeId)){
+            throw new Exception("Employee doesn't exists");
+        }
+        return employeeDao.getEmployee(employeeId);
+    }
     public ArrayList<Employee> getAllEmployees() throws Exception, SQLException {
         return employeeDao.getAll();
     }

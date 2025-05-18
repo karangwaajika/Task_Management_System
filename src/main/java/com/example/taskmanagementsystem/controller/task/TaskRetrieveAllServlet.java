@@ -1,4 +1,4 @@
-package com.example.taskmanagementsystem.controller;
+package com.example.taskmanagementsystem.controller.task;
 
 import com.example.taskmanagementsystem.model.Task;
 import com.example.taskmanagementsystem.service.TaskService;
@@ -50,7 +50,7 @@ public class TaskRetrieveAllServlet extends HttpServlet {
             String json = """
                 {
                     "status": "fail",
-                    "message": "Error encountered !!"
+                    "message":"""+e.getMessage()+"""
                 }
             """;
 

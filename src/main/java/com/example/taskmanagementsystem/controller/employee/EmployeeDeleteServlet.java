@@ -1,8 +1,6 @@
-package com.example.taskmanagementsystem.controller;
+package com.example.taskmanagementsystem.controller.employee;
 
-import com.example.taskmanagementsystem.model.Project;
-import com.example.taskmanagementsystem.service.ProjectService;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.example.taskmanagementsystem.service.EmployeeService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -14,23 +12,23 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
 
-@WebServlet(name = "fetchProjects", value = "/view_projects")
-public class ProjectRetrieveAllServlet extends HttpServlet {
-    private final ProjectService projectService = new ProjectService();
-    private static final Logger logger = LogManager.getLogger(ProjectRetrieveAllServlet.class);
+@WebServlet(name = "deleteEmployee", value = "/delete_employee")
+public class EmployeeDeleteServlet extends HttpServlet {
+    private final EmployeeService employeeService = new EmployeeService();
+    private static final Logger logger = LogManager.getLogger(EmployeeDeleteServlet.class);
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String id = req.getParameter("id");
         try {
-            List<Project> projects = projectService.getAllProjects();
-            // Convert to JSON
-            ObjectMapper mapper = new ObjectMapper();
-            String json = mapper.writeValueAsString(projects);
-
-            // Set response type
-            resp.setContentType("application/json");
-            resp.setCharacterEncoding("UTF-8");
+            employeeService.deleteEmployee(Integer.parseInt(id));
+            // Response Json
+            String json = """
+                {
+                    "status": "success",
+                    "message": "Employee deleted successfully !!"
+                }
+            """;
 
             // Set response type and encoding
             resp.setContentType("application/json");
@@ -46,7 +44,7 @@ public class ProjectRetrieveAllServlet extends HttpServlet {
             String json = """
                 {
                     "status": "fail",
-                    "message": "Error encountered !!"
+                    "message":"""+ e.getMessage() +"""
                 }
             """;
 

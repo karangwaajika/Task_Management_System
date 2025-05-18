@@ -69,6 +69,29 @@ public class TaskDao {
         return false;
     }
 
+    public Task getTask(int taskId) throws Exception, SQLException{
+        String query = " SELECT * FROM task WHERE id = ?";
+        Task task = null;
+
+        try(Connection conn = DBConnection.getConnection();
+            PreparedStatement statement = conn.prepareStatement(query)){
+            statement.setInt(1, taskId);
+            ResultSet rs = statement.executeQuery();
+
+            if (rs.next()) {
+                // Create and set project
+                ProjectService ps = new ProjectService();
+                Project project = ps.getProject(rs.getInt("project_id"));
+
+                task = new Task(rs.getInt("id"), rs.getString("title"),
+                        rs.getString("description"), rs.getInt("status"),
+                        rs.getObject("due_date", LocalDate.class),project
+                );
+            }
+        }
+        return task;
+    }
+
     public ArrayList<Task> getAll() throws Exception, SQLException{
         ArrayList<Task> taskList = new ArrayList<>();
         String query = """

@@ -1,4 +1,4 @@
-package com.example.taskmanagementsystem.controller;
+package com.example.taskmanagementsystem.controller.project;
 
 import com.example.taskmanagementsystem.model.Project;
 import com.example.taskmanagementsystem.service.ProjectService;
@@ -50,7 +50,7 @@ public class ProjectAddServlet extends HttpServlet {
             String json = """
                 {
                     "status": "fail",
-                    "message": "Error encountered!!"
+                    "message":"""+ e.getMessage() +"""
                 }
             """;
 

@@ -1,6 +1,5 @@
-package com.example.taskmanagementsystem.controller;
+package com.example.taskmanagementsystem.controller.project;
 
-import com.example.taskmanagementsystem.model.Project;
 import com.example.taskmanagementsystem.service.ProjectService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -14,25 +13,20 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-@WebServlet(name = "updateProject", value = "/update_project")
-public class ProjectUpdateServlet extends HttpServlet {
+@WebServlet(name = "deleteProject", value = "/delete_project")
+public class ProjectDeleteServlet extends HttpServlet {
     private final ProjectService projectService = new ProjectService();
-    private static final Logger logger = LogManager.getLogger(ProjectUpdateServlet.class);
+    private static final Logger logger = LogManager.getLogger(ProjectDeleteServlet.class);
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-        String name = req.getParameter("name");
-        String description = req.getParameter("description");
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String id = req.getParameter("id");
-
-        Project project = new Project(Integer.parseInt(id), name, description);
         try {
-            projectService.updateProject(project);
+            projectService.deleteProject(Integer.parseInt(id));
             // Response Json
             String json = """
                 {
                     "status": "success",
-                    "message": "Project updated successfully!!"
+                    "message": "Project deleted successfully !!"
                 }
             """;
 
@@ -50,7 +44,7 @@ public class ProjectUpdateServlet extends HttpServlet {
             String json = """
                 {
                     "status": "fail",
-                    "message": "Error encountered, no update!!"
+                    "message":"""+ e.getMessage() +"""
                 }
             """;
 

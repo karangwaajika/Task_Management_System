@@ -1,8 +1,7 @@
-package com.example.taskmanagementsystem.controller;
+package com.example.taskmanagementsystem.controller.employee;
 
 import com.example.taskmanagementsystem.model.Employee;
 import com.example.taskmanagementsystem.service.EmployeeService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -14,22 +13,28 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
 
-@WebServlet(name = "deleteEmployee", value = "/delete_employee")
-public class EmployeeDeleteServlet extends HttpServlet {
+@WebServlet(name = "registerEmployee", value = "/add_employee")
+public class EmployeeRegistrationServlet extends HttpServlet {
     private final EmployeeService employeeService = new EmployeeService();
-    private static final Logger logger = LogManager.getLogger(EmployeeDeleteServlet.class);
+    private static final Logger logger = LogManager.getLogger(EmployeeRegistrationServlet.class);
     @Override
-    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String id = req.getParameter("id");
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String firstName = req.getParameter("first_name");
+        String lastName = req.getParameter("last_name");
+        String email = req.getParameter("email");
+        String telephoneNumber = req.getParameter("telephone_number");
+        char sex = req.getParameter("sex").charAt(0);
+
+        Employee employee = new Employee(firstName, lastName, email,
+                telephoneNumber, sex);
         try {
-            employeeService.deleteEmployee(Integer.parseInt(id));
+            employeeService.registerEmployee(employee);
             // Response Json
             String json = """
                 {
                     "status": "success",
-                    "message": "Employee deleted successfully !!"
+                    "message": "Employee Registered successfully!!"
                 }
             """;
 
@@ -47,7 +52,7 @@ public class EmployeeDeleteServlet extends HttpServlet {
             String json = """
                 {
                     "status": "fail",
-                    "message": "Error encountered !!"
+                    "message":"""+ e.getMessage() +"""
                 }
             """;
 
@@ -60,6 +65,7 @@ public class EmployeeDeleteServlet extends HttpServlet {
             ou.print(json);
             ou.flush();
         }
+
 
     }
 }

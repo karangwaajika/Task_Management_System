@@ -14,6 +14,13 @@ public class TaskService {
         taskDao.insert(task);
     }
 
+    public Task getTask(int taskId) throws Exception, SQLException {
+        if(!taskDao.checkIdExists(taskId)){
+            throw new Exception("Task doesn't exists");
+        }
+        return taskDao.getTask(taskId);
+    }
+
     public ArrayList<Task> getAllTasks() throws Exception, SQLException {
         return taskDao.getAll();
     }

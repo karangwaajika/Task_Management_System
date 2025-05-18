@@ -1,7 +1,8 @@
-package com.example.taskmanagementsystem.controller;
+package com.example.taskmanagementsystem.controller.employee;
 
 import com.example.taskmanagementsystem.model.Employee;
 import com.example.taskmanagementsystem.service.EmployeeService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -11,37 +12,28 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.stream.Collectors;
+import java.util.List;
 
-@WebServlet(name = "updateEmployee", value = "/update_employee")
-public class EmployeeUpdateServlet extends HttpServlet {
+@WebServlet(name = "fetchEmployee", value = "/view_employee/*")
+public class EmployeeRetrieveOneServlet extends HttpServlet {
     private final EmployeeService employeeService = new EmployeeService();
-    private static final Logger logger = LogManager.getLogger(EmployeeUpdateServlet.class);
+    private static final Logger logger = LogManager.getLogger(EmployeeRetrieveOneServlet.class);
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String pathInfo = req.getPathInfo(); // e.g. /5
+        String id = pathInfo.substring(1); // remove leading "/"
 
-        String firstName = req.getParameter("first_name");
-        String lastName = req.getParameter("last_name");
-        String email = req.getParameter("email");
-        String telephoneNumber = req.getParameter("telephone_number");
-        String sex = req.getParameter("sex");
-        String id = req.getParameter("id");
-
-        Employee employee = new Employee(Integer.parseInt(id), firstName, lastName, email,
-                telephoneNumber, sex.charAt(0));
         try {
-            employeeService.updateEmployee(employee);
-            // Response Json
-            String json = """
-                {
-                    "status": "success",
-                    "message": "Employee updated successfully!!"
-                }
-            """;
+            Employee employee = employeeService.getEmployee(Integer.parseInt(id));
+            // Convert to JSON
+            ObjectMapper mapper = new ObjectMapper();
+            String json = mapper.writeValueAsString(employee);
+
+            // Set response type
+            resp.setContentType("application/json");
+            resp.setCharacterEncoding("UTF-8");
 
             // Set response type and encoding
             resp.setContentType("application/json");
@@ -57,7 +49,7 @@ public class EmployeeUpdateServlet extends HttpServlet {
             String json = """
                 {
                     "status": "fail",
-                    "message": "Error encountered, no update!!"
+                    "message":"""+ e.getMessage() +"""
                 }
             """;
 
